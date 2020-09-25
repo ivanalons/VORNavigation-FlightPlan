@@ -3,9 +3,12 @@
  */
 package iag.vornav.dto;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -18,7 +21,7 @@ import javax.persistence.Table;
 public class NavaidDTO {
 
 	@Id
-//	@GeneratedValue( strategy = GenerationType.IDENTITY )
+//	@GeneratedValue( strategy = GenerationType.IDENTITY ) //not necessary identifier is provided
 	private Long identifier;
 	
 	private String type;
@@ -60,7 +63,8 @@ public class NavaidDTO {
 	@Column(name="param_aligned_to_true_north")
 	private boolean paramAlignedToTrueNorth;
 
-	
+	@OneToMany(mappedBy="navaidSource")
+	private List<RangeDTO> rangeList;
 	
 	public NavaidDTO() {
 		
