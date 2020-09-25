@@ -48,12 +48,20 @@ public class NavaidDTO {
 	@Column(name="radio_channel")
 	private String radioChannel;
 	
+	@Column(name="param_range")
+	private Integer paramRange;
+	
+	@Column(name="param_range_unit")
+	private String paramRangeUnit;
+	
 	@Column(name="param_declination")
 	private double paramDeclination;
 	
 	@Column(name="param_aligned_to_true_north")
 	private boolean paramAlignedToTrueNorth;
 
+	
+	
 	public NavaidDTO() {
 		
 	}
@@ -194,6 +202,22 @@ public class NavaidDTO {
 
 	public void setParamAlignedToTrueNorth(boolean paramAlignedToTrueNorth) {
 		this.paramAlignedToTrueNorth = paramAlignedToTrueNorth;
+	}
+
+	public int getParamRange() {
+		return paramRange;
+	}
+
+	public void setParamRange(int paramRange) {
+		this.paramRange = paramRange;
+	}
+
+	public String getParamRangeUnit() {
+		return paramRangeUnit;
+	}
+
+	public void setParamRangeUnit(String paramRangeUnit) {
+		this.paramRangeUnit = paramRangeUnit;
 	}
 	
 	

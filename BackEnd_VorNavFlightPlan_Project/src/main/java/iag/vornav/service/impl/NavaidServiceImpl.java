@@ -15,6 +15,7 @@ import iag.vornav.controller.xml.navaids.NAVAID;
 import iag.vornav.controller.xml.navaids.OPENAIP;
 import iag.vornav.controller.xml.navaids.PARAMS;
 import iag.vornav.controller.xml.navaids.RADIO;
+import iag.vornav.controller.xml.navaids.RANGE;
 import iag.vornav.dao.INavaidDAO;
 import iag.vornav.dto.NavaidDTO;
 import iag.vornav.service.INavaidService;
@@ -59,11 +60,21 @@ public class NavaidServiceImpl implements INavaidService{
 			navaidDTO.setRadioChannel(xmlRadio.getCHANNEL());
 			
 			PARAMS xmlParams = xmlNavaid.getParams();
+			
 			navaidDTO.setParamDeclination(xmlParams.getDECLINATION());
 			
 			boolean north = Boolean.getBoolean(xmlParams.getALIGNEDTOTRUENORTH());
 			navaidDTO.setParamAlignedToTrueNorth(north);
 
+			RANGE xmlRange = xmlParams.getRange();
+			if(xmlRange!=null) {
+				navaidDTO.setParamRange(xmlRange.getValue());
+				navaidDTO.setParamRangeUnit(xmlRange.getUNIT());
+			}else {
+				navaidDTO.setParamRange(43); // DEFAULT RANGE - TODO THINK ABOUT IT!
+											 // AVG FROM ALL NOT NULL RANGES 
+			}
+			
 			navaidDTOList.add(navaidDTO);
 			
 		}

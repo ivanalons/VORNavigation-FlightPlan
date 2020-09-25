@@ -14,6 +14,9 @@ public class PARAMS {
 	@JsonProperty("ALIGNEDTOTRUENORTH")
 	private String ALIGNEDTOTRUENORTH;
 
+	@JsonProperty("RANGE")
+	private RANGE range;
+	
 	public double getDECLINATION() {
 		return DECLINATION;
 	}
@@ -29,5 +32,15 @@ public class PARAMS {
 	public void setALIGNEDTOTRUENORTH(String aLIGNEDTOTRUENORTH) {
 		ALIGNEDTOTRUENORTH = aLIGNEDTOTRUENORTH;
 	}
+
+	public RANGE getRange() {
+		return range;
+	}
+
+	public void setRange(RANGE range) {
+		this.range = range;
+	}
+	
+	
 	
 }
