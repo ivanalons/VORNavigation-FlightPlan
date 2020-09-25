@@ -1,7 +1,11 @@
 package iag.vornav.controller.xml.navaids;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * 
+ * @author Ivan Alonso
+ *
+ */
 public class PARAMS {
 
 	@JsonProperty("DECLINATION")

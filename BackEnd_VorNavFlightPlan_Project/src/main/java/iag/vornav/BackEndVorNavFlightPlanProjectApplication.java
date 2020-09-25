@@ -2,7 +2,11 @@ package iag.vornav;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+/**
+ * 
+ * @author Ivan Alonso
+ *
+ */
 @SpringBootApplication
 public class BackEndVorNavFlightPlanProjectApplication {
 

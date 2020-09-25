@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import iag.vornav.controller.xml.navaids.OPENAIP;
-
+/**
+ * 
+ * @author Ivan Alonso
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class NavaidsImportController {
