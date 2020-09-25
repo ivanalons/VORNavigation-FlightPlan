@@ -3,6 +3,7 @@
  */
 package iag.vornav.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,11 @@ public class NavaidServiceImpl implements INavaidService{
 	@Override
 	public void saveImportNavaids(OPENAIP openAip) {
 		
-		List<NAVAID> navaidList = openAip.getNavaidsList();
+		List<NAVAID> xmlNavaidList = openAip.getNavaidsList();
 		
-		for( NAVAID xmlNavaid : navaidList ) {
+		List<NavaidDTO> navaidDTOList = new ArrayList<>();
+		
+		for( NAVAID xmlNavaid : xmlNavaidList ) {
 			
 			NavaidDTO navaidDTO = new NavaidDTO();
 			
@@ -61,10 +64,11 @@ public class NavaidServiceImpl implements INavaidService{
 			boolean north = Boolean.getBoolean(xmlParams.getALIGNEDTOTRUENORTH());
 			navaidDTO.setParamAlignedToTrueNorth(north);
 
-			iNavaidDAO.save(navaidDTO); //TO DO: improve saving a list of navaids at once
+			navaidDTOList.add(navaidDTO);
 			
 		}
 		
+		iNavaidDAO.saveAll(navaidDTOList);
 		
 	}
 
