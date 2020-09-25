@@ -14,4 +14,5 @@ public interface INavaidService {
 	
 	public void saveImportNavaids(OPENAIP openAip);
 	
+	public void calculateNavaidsRange();
 }

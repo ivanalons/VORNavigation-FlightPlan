@@ -17,7 +17,10 @@ import iag.vornav.controller.xml.navaids.PARAMS;
 import iag.vornav.controller.xml.navaids.RADIO;
 import iag.vornav.controller.xml.navaids.RANGE;
 import iag.vornav.dao.INavaidDAO;
+import iag.vornav.dao.IRangeDAO;
 import iag.vornav.dto.NavaidDTO;
+import iag.vornav.dto.RangeDTO;
+import iag.vornav.dto.serializable.RangeId;
 import iag.vornav.service.INavaidService;
 
 /**
@@ -30,8 +33,11 @@ public class NavaidServiceImpl implements INavaidService{
 	@Autowired
 	INavaidDAO iNavaidDAO;
 	
+	@Autowired
+	IRangeDAO iRangeDAO;
+	
 	@Override
-	public void saveImportNavaids(OPENAIP openAip) {
+	public void saveImportNavaids(OPENAIP openAip) { //TODO clean code
 		
 		List<NAVAID> xmlNavaidList = openAip.getNavaidsList();
 		
@@ -80,6 +86,45 @@ public class NavaidServiceImpl implements INavaidService{
 		}
 		
 		iNavaidDAO.saveAll(navaidDTOList);
+		
+	}
+
+	/**
+	 * DATABASE TEST IMPLEMENTATION
+	 */
+	public void testcalculateNavaidsRange() {
+		
+//		List<NavaidDTO> navaidList = iNavaidDAO.findAll();
+		
+		NavaidDTO navaid1 = iNavaidDAO.findById(1744059L).get();
+		NavaidDTO navaid2 = iNavaidDAO.findById(1744061L).get();
+		NavaidDTO navaid3 = iNavaidDAO.findById(2630060L).get();
+		NavaidDTO navaid4 = iNavaidDAO.findById(1744062L).get();
+
+		System.out.println(navaid1.toString());
+		System.out.println(navaid2.toString());
+		System.out.println(navaid3.toString());
+		System.out.println(navaid4.toString());
+
+		RangeDTO range2 = new RangeDTO(navaid1,navaid2);
+		RangeDTO range3 = new RangeDTO(navaid1,navaid3);
+		RangeDTO range4 = new RangeDTO(navaid1,navaid4);
+		
+		iRangeDAO.save(range2);
+		iRangeDAO.save(range3);
+		iRangeDAO.save(range4);
+		
+		navaid1 = iNavaidDAO.findById(1744059L).get();
+		List<RangeDTO> rangeList = navaid1.getRangeList();
+		for(RangeDTO r : rangeList) {
+			System.out.println(r.toString());
+		}
+	}
+
+	@Override
+	public void calculateNavaidsRange() {
+
+		testcalculateNavaidsRange();
 		
 	}
 

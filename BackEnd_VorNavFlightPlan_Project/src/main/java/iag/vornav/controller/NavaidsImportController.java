@@ -32,7 +32,19 @@ public class NavaidsImportController {
 		navaidServiceImpl.saveImportNavaids(openaip);
 		
 		Map<String,Object> map = new HashMap<>();
-		map.put("hello", "world");
+		map.put("success", true);
+		map.put("message", "Navaids imported correctly.");
+		return map;
+	}
+	
+	@PostMapping(value="/navaids/range")
+	public Map<String,Object> calculateNavaidsRange(){
+		
+		navaidServiceImpl.calculateNavaidsRange();
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("success", true);
+		map.put("message", "Navaids range calculated correctly.");
 		return map;
 	}
 	

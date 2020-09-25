@@ -74,6 +74,10 @@ public class RangeDTO {
 		this.navaidTarget = navaidTarget;
 	}
 	
-	
+	public String toString() {
+		return "Range [navaid_source_name="+this.getNavaidSource().getName()
+				+", navaid_target_name="+this.getNavaidTarget().getName()+"]";
+
+	}
 	
 }

@@ -232,5 +232,7 @@ public class NavaidDTO {
 		this.rangeList = rangeList;
 	}
 	
-	
+	public String toString() {
+		return "Navaid [id="+this.identifier+", name="+this.name+"]";
+	}
 }
