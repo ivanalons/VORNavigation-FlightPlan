@@ -16,6 +16,31 @@ public class GEOLOCATION {
 	
     @JsonProperty("ELEV")
 	private ELEV elev;
+
+	public double getLAT() {
+		return LAT;
+	}
+
+	public void setLAT(double lAT) {
+		LAT = lAT;
+	}
+
+	public double getLON() {
+		return LON;
+	}
+
+	public void setLON(double lON) {
+		LON = lON;
+	}
+
+	public ELEV getElev() {
+		return elev;
+	}
+
+	public void setElev(ELEV elev) {
+		this.elev = elev;
+	}
+    
     
     
 }

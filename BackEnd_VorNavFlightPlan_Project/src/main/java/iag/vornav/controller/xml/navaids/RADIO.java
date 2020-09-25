@@ -9,16 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class RADIO {
 
 	@JsonProperty("FREQUENCY")
-	private double FREQUENCY;
+	private float FREQUENCY;
 	
 	@JsonProperty("CHANNEL")
 	private String CHANNEL;
 
-	public double getFREQUENCY() {
+	public float getFREQUENCY() {
 		return FREQUENCY;
 	}
 
-	public void setFREQUENCY(double fREQUENCY) {
+	public void setFREQUENCY(float fREQUENCY) {
 		FREQUENCY = fREQUENCY;
 	}
 

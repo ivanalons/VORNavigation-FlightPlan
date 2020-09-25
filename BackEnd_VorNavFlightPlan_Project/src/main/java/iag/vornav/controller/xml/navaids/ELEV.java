@@ -14,4 +14,22 @@ public class ELEV {
 	
 	@JacksonXmlText
 	private int value;
+
+	public String getUNIT() {
+		return UNIT;
+	}
+
+	public void setUNIT(String uNIT) {
+		UNIT = uNIT;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+	
+	
 }
