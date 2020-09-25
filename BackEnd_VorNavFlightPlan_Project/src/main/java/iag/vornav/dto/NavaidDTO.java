@@ -208,11 +208,11 @@ public class NavaidDTO {
 		this.paramAlignedToTrueNorth = paramAlignedToTrueNorth;
 	}
 
-	public int getParamRange() {
+	public Integer getParamRange() {
 		return paramRange;
 	}
 
-	public void setParamRange(int paramRange) {
+	public void setParamRange(Integer paramRange) {
 		this.paramRange = paramRange;
 	}
 
@@ -222,6 +222,14 @@ public class NavaidDTO {
 
 	public void setParamRangeUnit(String paramRangeUnit) {
 		this.paramRangeUnit = paramRangeUnit;
+	}
+
+	public List<RangeDTO> getRangeList() {
+		return rangeList;
+	}
+
+	public void setRangeList(List<RangeDTO> rangeList) {
+		this.rangeList = rangeList;
 	}
 	
 	
