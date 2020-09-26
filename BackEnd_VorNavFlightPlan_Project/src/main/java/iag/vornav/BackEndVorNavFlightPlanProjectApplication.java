@@ -2,6 +2,9 @@ package iag.vornav;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * 
  * @author Ivan Alonso
@@ -14,4 +17,19 @@ public class BackEndVorNavFlightPlanProjectApplication {
 		SpringApplication.run(BackEndVorNavFlightPlanProjectApplication.class, args);
 	}
 
+	/**
+	 * Allow all rest api requests from STATIC web project
+	 * 
+	 * @return
+	 */
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET","POST","PUT","DELETE");
+			}
+		};
+	}	
+	
 }
