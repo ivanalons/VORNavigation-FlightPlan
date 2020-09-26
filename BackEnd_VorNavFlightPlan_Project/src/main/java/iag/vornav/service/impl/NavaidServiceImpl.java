@@ -53,17 +53,9 @@ public class NavaidServiceImpl implements INavaidService{
 			navaidDTO.setName(xmlNavaid.getNAME());
 			navaidDTO.setIdName(xmlNavaid.getID());
 			
-			GEOLOCATION xmlGeo = xmlNavaid.getGeoLocation();
-			navaidDTO.setGeolocationLat(xmlGeo.getLAT());
-			navaidDTO.setGeolocationLon(xmlGeo.getLON());
+			setGeolocationFromXML(xmlNavaid, navaidDTO);
 			
-			ELEV xmlElev = xmlGeo.getElev();
-			navaidDTO.setGeolocationElevUnit(xmlElev.getUNIT());
-			navaidDTO.setGeolocationElev(xmlElev.getValue());
-			
-			RADIO xmlRadio = xmlNavaid.getRadio();
-			navaidDTO.setRadioFrequency(xmlRadio.getFREQUENCY());
-			navaidDTO.setRadioChannel(xmlRadio.getCHANNEL());
+			setRadioFromXML(xmlNavaid,navaidDTO);
 			
 			PARAMS xmlParams = xmlNavaid.getParams();
 			
@@ -86,6 +78,36 @@ public class NavaidServiceImpl implements INavaidService{
 		}
 		
 		iNavaidDAO.saveAll(navaidDTOList);
+		
+	}
+	
+	private void setGeolocationFromXML(NAVAID xmlNavaid, NavaidDTO navaidDTO) {
+		GEOLOCATION xmlGeo = xmlNavaid.getGeoLocation();
+		navaidDTO.setGeolocationLat(xmlGeo.getLAT());
+		navaidDTO.setGeolocationLon(xmlGeo.getLON());
+		
+		ELEV xmlElev = xmlGeo.getElev();
+		navaidDTO.setGeolocationElevUnit(xmlElev.getUNIT());
+		navaidDTO.setGeolocationElev(xmlElev.getValue());
+	}
+	
+	private void setRadioFromXML(NAVAID xmlNavaid, NavaidDTO navaidDTO) {
+		RADIO xmlRadio = xmlNavaid.getRadio();
+		navaidDTO.setRadioFrequency(xmlRadio.getFREQUENCY());
+		navaidDTO.setRadioChannel(xmlRadio.getCHANNEL());
+	}
+
+	@Override
+	public void calculateNavaidsRange() {
+
+		testcalculateNavaidsRange();
+		
+	}
+
+	@Override
+	public List<NavaidDTO> getAllNavaids() {
+
+		return iNavaidDAO.findAll();
 		
 	}
 
@@ -120,12 +142,5 @@ public class NavaidServiceImpl implements INavaidService{
 			System.out.println(r.toString());
 		}
 	}
-
-	@Override
-	public void calculateNavaidsRange() {
-
-		testcalculateNavaidsRange();
-		
-	}
-
+	
 }

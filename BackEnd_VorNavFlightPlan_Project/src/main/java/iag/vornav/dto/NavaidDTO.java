@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Ivan Alonso
  *
@@ -63,6 +65,7 @@ public class NavaidDTO {
 	@Column(name="param_aligned_to_true_north")
 	private boolean paramAlignedToTrueNorth;
 
+	@JsonIgnore
 	@OneToMany(mappedBy="navaidSource")
 	private List<RangeDTO> rangeList;
 	

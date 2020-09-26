@@ -1,16 +1,19 @@
 package iag.vornav.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import iag.vornav.controller.xml.navaids.OPENAIP;
+import iag.vornav.dto.NavaidDTO;
 import iag.vornav.service.impl.NavaidServiceImpl;
 /**
  * 
@@ -19,10 +22,24 @@ import iag.vornav.service.impl.NavaidServiceImpl;
  */
 @RestController
 @RequestMapping("/api")
-public class NavaidsImportController {
+public class NavaidsController {
 
 	@Autowired
 	NavaidServiceImpl navaidServiceImpl;
+	
+	@GetMapping(value="/navaids", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String,Object> getAllNavaids(){
+		
+		List<NavaidDTO> navaidsList = navaidServiceImpl.getAllNavaids();
+		
+		Map<String,Object> map = new HashMap<>();
+		
+		map.put("navaids", navaidsList);
+		map.put("success", true);
+		map.put("message", "Navaids imported correctly.");
+		
+		return map;
+	}
 	
 	
 	@PostMapping(value="/navaids", consumes = MediaType.APPLICATION_XML_VALUE,
