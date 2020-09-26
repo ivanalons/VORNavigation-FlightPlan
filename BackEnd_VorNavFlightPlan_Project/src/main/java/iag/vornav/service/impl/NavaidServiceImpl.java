@@ -20,8 +20,10 @@ import iag.vornav.dao.INavaidDAO;
 import iag.vornav.dao.IRangeDAO;
 import iag.vornav.dto.NavaidDTO;
 import iag.vornav.dto.RangeDTO;
-import iag.vornav.dto.serializable.RangeId;
 import iag.vornav.service.INavaidService;
+import iag.vornav.tools.Coordinate;
+import iag.vornav.tools.HaversineDistance;
+import iag.vornav.tools.MathTools;
 
 /**
  * @author Ivan Alonso
@@ -100,7 +102,40 @@ public class NavaidServiceImpl implements INavaidService{
 	@Override
 	public void calculateNavaidsRange() {
 
-		testcalculateNavaidsRange();
+//		testcalculateNavaidsRange();
+		List<NavaidDTO> navaidList = iNavaidDAO.findAll();
+		
+		for( NavaidDTO sourceNavaid : navaidList ) {
+			for( NavaidDTO targetNavaid : navaidList ) {
+				
+				boolean sameNavaid = sourceNavaid.getIdentifier()==targetNavaid.getIdentifier();
+				
+				if(sameNavaid==false) {
+					
+					double kmRange_sourceNavaid = MathTools.convertNMToKm(sourceNavaid.getParamRange());
+					
+					Coordinate c1 = new Coordinate(sourceNavaid.getGeolocationLat(),
+												   sourceNavaid.getGeolocationLon());
+					Coordinate c2 = new Coordinate(targetNavaid.getGeolocationLat(),
+												   targetNavaid.getGeolocationLon());
+					
+					double distance = HaversineDistance.calculateDistance(c1, c2);
+					
+					if(distance < kmRange_sourceNavaid) {
+						saveNavaidRange(sourceNavaid,targetNavaid);
+					}
+					
+				}
+				
+			}
+		}
+		
+	}
+	
+	private RangeDTO saveNavaidRange(NavaidDTO navaidSource, NavaidDTO navaidTarget) {
+		
+		RangeDTO rangeDTO = new RangeDTO(navaidSource,navaidTarget);
+		return iRangeDAO.save(rangeDTO);
 		
 	}
 
