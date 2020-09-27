@@ -1,5 +1,7 @@
 	var mymap = null; //global variable to operate with javaScript with Leaflet map
 	var routePolyline = null; //global variable to remove polylines for route drawings
+	var departureMark = null;
+	var arrivalMark = null;
 	
 	function setUpLeafletMap(){
 		mymap = L.map('mapid').setView([40.2085, -3.713], 6);
@@ -103,11 +105,20 @@
 			
 			document.getElementById("departureMessage").innerHTML = ""; 
 			document.getElementById("arrivalMessage").innerHTML = "Click on the map the arrival location"; 
+			
+			//var marker = L.marker([lat, lng]).addTo(mymap).bindPopup("SOURCE");
+			departureMark = createCircle(lat,lng,"DEPARTURE");
+			
 		}else{
 			document.getElementById("lat2").value = lat; 
 			document.getElementById("lng2").value = lng;
 			
 			document.getElementById("arrivalMessage").innerHTML = ""; 
+			
+			if(arrivalMark!=null) arrivalMark.remove(mymap);
+			//var marker = L.marker([lat, lng]).addTo(mymap).bindPopup("TARGET");
+			arrivalMark = createCircle(lat,lng,"ARRIVAL");
+
 		}
 	}
 
@@ -121,6 +132,8 @@
 		
 		document.getElementById("arrivalMessage").innerHTML = ""; 
 		document.getElementById("departureMessage").innerHTML = "Click on the map the departure location"; 
+		arrivalMark.remove(mymap);
+		departureMark.remove(mymap);
 
 	}
 	
@@ -135,4 +148,17 @@
 		window.alert("Missing implementation");
 		
 		routePolyline.remove(mymap);
+	}
+	
+	function createCircle(lat,lng,message){
+		
+		var circle = L.circle([lat,lng], {
+			color: 'green',
+			fillColor: 'green',
+			fillOpacity: 1,
+			radius: 20000,
+			pane: "polylines"
+		}).addTo(mymap).bindPopup(message).openPopup();	
+		
+		return circle;
 	}
