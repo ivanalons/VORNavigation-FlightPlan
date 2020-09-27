@@ -1,3 +1,18 @@
+	var mymap = null; //global variable to operate with javaScript with Leaflet map
+	var routePolyline = null; //global variable to remove polylines for route drawings
+	
+	function setUpLeafletMap(){
+		mymap = L.map('mapid').setView([40.2085, -3.713], 6);
+		
+		mymap.createPane('polylines');
+		mymap.getPane('polylines').style.zIndex = 650;
+		
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(mymap);
+
+		mymap.on('click', onMapClick);
+	}
 	
 	function sendGetNavaidsRequest(){
 				
@@ -69,13 +84,55 @@
 			color: 'red',
 			weight: 10
 		});
+		
+		routePolyline = polyline;
 				
 	}
 	
 	function onMapClick(e) {
-		alert("You clicked the map at " + e.latlng);
+		//alert("You clicked the map at " + e.latlng);
+		var lat = e.latlng.lat;
+		var lng = e.latlng.lng;
+		//alert(lat+","+lng);
+		
+		var d = document.getElementById("lat1").value;		
+		
+		if(d==""){ 
+			document.getElementById("lat1").value = lat; 
+			document.getElementById("lng1").value = lng; 
+			
+			document.getElementById("departureMessage").innerHTML = ""; 
+			document.getElementById("arrivalMessage").innerHTML = "Click on the map the arrival location"; 
+		}else{
+			document.getElementById("lat2").value = lat; 
+			document.getElementById("lng2").value = lng;
+			
+			document.getElementById("arrivalMessage").innerHTML = ""; 
+		}
 	}
 
+	function resetLocations(){
+				
+		document.getElementById("lat1").value = ""; 
+		document.getElementById("lng1").value = ""; 
 	
+		document.getElementById("lat2").value = ""; 
+		document.getElementById("lng2").value = "";
+		
+		document.getElementById("arrivalMessage").innerHTML = ""; 
+		document.getElementById("departureMessage").innerHTML = "Click on the map the departure location"; 
+
+	}
 	
+	function calculateFlightPlan(){
+		
+		var lat1 = document.getElementById("lat1").value; 
+		var lng1 = document.getElementById("lng1").value; 
 	
+		var lat2 = document.getElementById("lat2").value; 
+		var lng2 = document.getElementById("lng2").value;
+		
+		window.alert("Missing implementation");
+		
+		routePolyline.remove(mymap);
+	}

@@ -27,7 +27,50 @@
 	</head>
 	
 	<body>
-	
+		<table>
+			<tr>
+				<td>
+					<div id="departureMessage" style="color:red">Click on the map the departure location</div>
+				</td>
+				<td align="right">			
+					<label>DEPARTURE LOCATION:</label>
+				</td>
+				<td>
+					<label>Lat:</label>
+				</td><td>
+					<input type="text" id="lat1" placeholder="Click on map" readonly/>
+				</td><td>
+					<label>Lng:</label>
+				</td><td>
+					<input type="text" id="lng1" placeholder="Click on map" readonly/>
+				</td>
+				<td>	
+					<input type="button" value="Reset Departure and Arrival" onclick="resetLocations();"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="arrivalMessage" style="color:red"></div>
+				</td>
+				<td align="right">
+					<label>ARRIVAL LOCATION:</label>
+				</td>
+				<td>
+					<label>Lat:</label>
+				</td><td>
+					<input type="text" id="lat2" placeholder="Click on map" readonly/>
+				</td><td>
+					<label>Lng:</label>
+				</td><td>
+					<input type="text" id="lng2" placeholder="Click on map" readonly/>
+				</td>
+				<td>
+					<input type="button" value="CALCULATE FLIGHT PLAN" onclick="calculateFlightPlan();"/>
+				</td>
+				
+			</tr>
+		</table>
+		
 		<div id="mapid"></div>
 			
 		<script>
@@ -36,16 +79,7 @@
 			// SETTING UP THE MAP
 			// ------------------
 			
-			var mymap = L.map('mapid').setView([40.2085, -3.713], 6);
-			
-			mymap.createPane('polylines');
-			mymap.getPane('polylines').style.zIndex = 650;
-			
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-			}).addTo(mymap);
-
-			mymap.on('click', onMapClick);
+			setUpLeafletMap();
 			
 			// -------------------------
 			// ADDING NAVAIDS TO THE MAP

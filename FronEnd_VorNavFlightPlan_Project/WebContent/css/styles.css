@@ -1,4 +1,4 @@
-#mapid { height: 640px; } <!-- ESSENTIAL FOR MAP REDERING -->
+#mapid { height: 540px; } <!-- ESSENTIAL FOR MAP REDERING -->
 
 <!-- SHOW POLYLINES ABOVE MARKERS -->
 /* .leaflet-overlay-pane { z-index: 4; } */
