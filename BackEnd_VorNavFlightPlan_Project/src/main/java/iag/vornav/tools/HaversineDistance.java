@@ -3,6 +3,8 @@
  */
 package iag.vornav.tools;
 
+import iag.vornav.dto.NavaidDTO;
+
 /**
  * @author Ivan Alonso
  *
@@ -29,6 +31,21 @@ public class HaversineDistance {
 
 	private static Double toRad(Double value) {
 		return value * Math.PI / 180;
+	}
+	
+	public static double calculateDistance(NavaidDTO navaid, Coordinate location) {
+		
+		Coordinate navaidLocation = new Coordinate(navaid.getGeolocationLat(),
+					navaid.getGeolocationLon());
+		double distance = HaversineDistance.calculateDistance(navaidLocation, location);
+		
+		return distance;
+	}
+	
+	public static double calculateDistance(Coordinate location, NavaidDTO navaid) {
+		
+		return calculateDistance(navaid,location);
+		
 	}
 
 }
