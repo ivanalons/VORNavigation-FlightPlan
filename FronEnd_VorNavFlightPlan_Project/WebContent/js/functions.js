@@ -160,6 +160,8 @@
 		document.getElementById("departureMessage").innerHTML = "Click on the map the departure location"; 
 		arrivalMark.remove(mymap);
 		departureMark.remove(mymap);
+		
+		if(routePolyline!=null) routePolyline.remove(mymap);
 
 	}
 	
