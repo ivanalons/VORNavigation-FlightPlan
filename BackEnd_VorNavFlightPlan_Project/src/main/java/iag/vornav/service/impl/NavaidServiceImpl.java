@@ -38,6 +38,8 @@ public class NavaidServiceImpl implements INavaidService{
 	@Autowired
 	IRangeDAO iRangeDAO;
 	
+	public final Integer defaultRange = 100; //DEFAULT RANGE FOR THOSE NAVAIDS WITH NULL RANGE
+	
 	@Override
 	public void saveImportNavaids(OPENAIP openAip) { //TODO clean code
 		
@@ -71,7 +73,7 @@ public class NavaidServiceImpl implements INavaidService{
 				navaidDTO.setParamRange(xmlRange.getValue());
 				navaidDTO.setParamRangeUnit(xmlRange.getUNIT());
 			}else {
-				navaidDTO.setParamRange(100); // DEFAULT RANGE - TODO THINK ABOUT IT!
+				navaidDTO.setParamRange(defaultRange); // DEFAULT RANGE - TODO THINK ABOUT IT!
 											 // NOT AVG FROM ALL NOT NULL RANGES 
 			}
 			
