@@ -27,6 +27,12 @@ public class NavaidsController {
 	@Autowired
 	NavaidServiceImpl navaidServiceImpl;
 	
+	/**
+	 * Request URL Example: http://localhost:8181/api/navaids
+	 * Request Body: none
+	 * 
+	 * @return list of all navaids stored in database
+	 */
 	@GetMapping(value="/navaids", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String,Object> getAllNavaids(){
 		

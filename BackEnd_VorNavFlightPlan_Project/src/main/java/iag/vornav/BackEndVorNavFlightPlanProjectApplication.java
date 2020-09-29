@@ -18,7 +18,7 @@ public class BackEndVorNavFlightPlanProjectApplication {
 	}
 
 	/**
-	 * Allow all rest api requests from STATIC web project
+	 * Allow all REST Web API requests from static web project (FrontEnd)
 	 * 
 	 * @return
 	 */
