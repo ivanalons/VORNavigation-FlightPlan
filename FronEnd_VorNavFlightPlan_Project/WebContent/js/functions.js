@@ -124,7 +124,8 @@
 		var lng = e.latlng.lng;
 		//alert(lat+","+lng);
 		
-		var d = document.getElementById("lat1").value;		
+		var d = document.getElementById("lat1").value;
+		var a = document.getElementById("lat2").value;
 		
 		if(d==""){ 
 			document.getElementById("lat1").value = lat; 
@@ -136,7 +137,7 @@
 			//var marker = L.marker([lat, lng]).addTo(mymap).bindPopup("SOURCE");
 			departureMark = createCircle(lat,lng,"DEPARTURE");
 			
-		}else{
+		}else if(a==""){
 			document.getElementById("lat2").value = lat; 
 			document.getElementById("lng2").value = lng;
 			
