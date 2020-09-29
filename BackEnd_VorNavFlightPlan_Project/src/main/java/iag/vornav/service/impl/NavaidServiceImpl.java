@@ -21,7 +21,6 @@ import iag.vornav.dao.IRangeDAO;
 import iag.vornav.dto.NavaidDTO;
 import iag.vornav.dto.RangeDTO;
 import iag.vornav.service.INavaidService;
-import iag.vornav.tools.Coordinate;
 import iag.vornav.tools.HaversineDistance;
 import iag.vornav.tools.MathTools;
 
@@ -40,6 +39,11 @@ public class NavaidServiceImpl implements INavaidService{
 	
 	public final Integer defaultRange = 100; //DEFAULT RANGE FOR THOSE NAVAIDS WITH NULL RANGE
 	
+	/**
+	 * 
+	 * Store in database the Java object representation of a list of navaids in format openAIP for navaids.
+	 *
+	 */
 	@Override
 	public void saveImportNavaids(OPENAIP openAip) { //TODO clean code
 		
@@ -74,7 +78,6 @@ public class NavaidServiceImpl implements INavaidService{
 				navaidDTO.setParamRangeUnit(xmlRange.getUNIT());
 			}else {
 				navaidDTO.setParamRange(defaultRange); // DEFAULT RANGE - TODO THINK ABOUT IT!
-											 // NOT AVG FROM ALL NOT NULL RANGES 
 			}
 			
 			navaidDTOList.add(navaidDTO);
@@ -85,6 +88,12 @@ public class NavaidServiceImpl implements INavaidService{
 		
 	}
 	
+	/**
+	 * Extracts information that belongs to xml data and saves it into a dto object NavaidDTO
+	 * 
+	 * @param xmlNavaid: Java XML data
+	 * @param navaidDTO: Java JPA entity
+	 */
 	private void setGeolocationFromXML(NAVAID xmlNavaid, NavaidDTO navaidDTO) {
 		GEOLOCATION xmlGeo = xmlNavaid.getGeoLocation();
 		navaidDTO.setGeolocationLat(xmlGeo.getLAT());
@@ -95,12 +104,25 @@ public class NavaidServiceImpl implements INavaidService{
 		navaidDTO.setGeolocationElev(xmlElev.getValue());
 	}
 	
+	/**
+	 * Extracts information that belongs to xml data and saves it into a dto object NavaidDTO
+	 * 
+	 * @param xmlNavaid: Java XML data
+	 * @param navaidDTO: Java JPA entity
+	 */
 	private void setRadioFromXML(NAVAID xmlNavaid, NavaidDTO navaidDTO) {
 		RADIO xmlRadio = xmlNavaid.getRadio();
 		navaidDTO.setRadioFrequency(xmlRadio.getFREQUENCY());
 		navaidDTO.setRadioChannel(xmlRadio.getCHANNEL());
 	}
 
+	/**
+	 * 
+	 * Stores in database table "`range`" for each navaid in table "navaids" the relationship:
+	 * 		FROM "source navaid" IS DETECTED "target navaid" 
+	 * 		based on if target range achieves source navaid location  
+	 * 
+	 */
 	@Override
 	public void calculateNavaidsRange() {
 
@@ -118,12 +140,7 @@ public class NavaidServiceImpl implements INavaidService{
 					// the targetNavaid range must be considered!!! (not the sourceNavaid range)
 					double kmRange_targetNavaid = MathTools.convertNMToKm(targetNavaid.getParamRange());
 					
-					Coordinate c1 = new Coordinate(sourceNavaid.getGeolocationLat(),
-												   sourceNavaid.getGeolocationLon());
-					Coordinate c2 = new Coordinate(targetNavaid.getGeolocationLat(),
-												   targetNavaid.getGeolocationLon());
-					
-					double distance = HaversineDistance.calculateDistance(c1, c2);
+					double distance = HaversineDistance.calculateDistance(sourceNavaid, targetNavaid);
 					
 					if(distance < kmRange_targetNavaid) {
 						saveNavaidRange(sourceNavaid,targetNavaid);
@@ -136,6 +153,14 @@ public class NavaidServiceImpl implements INavaidService{
 		
 	}
 	
+	/**
+	 * 
+	 * Insert a row in table "range" with navaidSource id and navaidTarget id
+	 * 
+	 * @param navaidSource
+	 * @param navaidTarget
+	 * @return a DTO object with the new range instance created in database
+	 */
 	private RangeDTO saveNavaidRange(NavaidDTO navaidSource, NavaidDTO navaidTarget) {
 		
 		RangeDTO rangeDTO = new RangeDTO(navaidSource,navaidTarget);
@@ -143,6 +168,9 @@ public class NavaidServiceImpl implements INavaidService{
 		
 	}
 
+	/**
+	 * Return the list of all navaids stored in database
+	 */
 	@Override
 	public List<NavaidDTO> getAllNavaids() {
 
@@ -151,7 +179,9 @@ public class NavaidServiceImpl implements INavaidService{
 	}
 
 	/**
-	 * DATABASE TEST IMPLEMENTATION
+	 * 
+	 * Method prepared only for testing purposes
+	 * 
 	 */
 	public void testcalculateNavaidsRange() {
 		

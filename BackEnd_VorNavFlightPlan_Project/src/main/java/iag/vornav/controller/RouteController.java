@@ -30,6 +30,21 @@ public class RouteController {
 	@Autowired
 	RouteServiceImpl routeServiceImpl;
 	
+	/**
+	 * PAY ATTENTION: THIRD STEP!: Get the route path (navaids list) from departure location to arrival
+	 * 							  location. 
+	 * 		Previous steps: (see NavaidsController methods)
+	 * 						1) POST /api/navaids (XML content with the navaids list in HTTP Request Body)
+	 * 						2) POST /api/navaids/range
+	 * 
+	 * Request URL Example: [POST method] http://localhost:8181/api/routes/strategy/simple
+	 * Request Body: param flightFromTo
+	 * 
+	 * @param flightFromTo - includes departure_location and arrival_location coordinates
+	 * @return the route path: the list of navaids that represent the coordinates where the route will
+	 *                         pass. Departure and Arrival locations are not included in the response. 
+	 *                         The algorythm, that calculates the route path, is the most simple. 
+	 */
 	@PostMapping(value="/strategy/simple")
 	public Map<String,Object> calculateSimpleRoute(@RequestBody FlightFromTo flightFromTo){
 

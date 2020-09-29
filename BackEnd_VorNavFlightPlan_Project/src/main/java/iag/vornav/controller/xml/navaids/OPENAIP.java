@@ -10,6 +10,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * @author Ivan Alonso
  *
  */
+/**
+ * Represents the XML Root Element of the .aip content format of the complete list of navaids 
+ * from one country.
+ * This class is used to convert the XML from the HTTP Request Body to a Java Object using 
+ * jackson-dataformat-xml POM dependency.
+ *
+ */
 @JacksonXmlRootElement
 public class OPENAIP {
 

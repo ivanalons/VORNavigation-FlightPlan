@@ -47,5 +47,18 @@ public class HaversineDistance {
 		return calculateDistance(navaid,location);
 		
 	}
+	
+	public static double calculateDistance(NavaidDTO sourceNavaid, NavaidDTO targetNavaid) {
+		
+		Coordinate c1 = new Coordinate(sourceNavaid.getGeolocationLat(),
+				   sourceNavaid.getGeolocationLon());
+		Coordinate c2 = new Coordinate(targetNavaid.getGeolocationLat(),
+						   targetNavaid.getGeolocationLon());
+		
+		double distance = HaversineDistance.calculateDistance(c1, c2);
+		
+		return distance;
+		
+	}
 
 }
