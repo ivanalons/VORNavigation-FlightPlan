@@ -2,6 +2,8 @@
 	var routePolyline = null; //global variable to remove polylines for route drawings
 	var departureMark = null;
 	var arrivalMark = null;
+	var circleRange = null; //last navaid range circle object shown in last marker click
+	var IDENTIFIER_lastNavaidClick = null; //last navaid marker click
 	
 	function setUpLeafletMap(){
 		mymap = L.map('mapid').setView([40.2085, -3.713], 6);
@@ -45,7 +47,7 @@
 				
 		for (var i = 0;i<navaidList.length;i++){
 			
-			var navaid = navaidList[i];
+			let navaid = navaidList[i];
 			
 			var lat = navaid.geolocationLat;
 			var lon = navaid.geolocationLon;
@@ -58,7 +60,8 @@
 			
 			var marker = L.marker([lat, lon]);
 			//marker.setOpacity(0.5);
-			marker.addTo(mymap).bindPopup(navaidInfo);
+			marker.addTo(mymap).bindPopup(navaidInfo)
+							   .on('click', function(e) { onMarkerClick(e, navaid);} );
 			
 		}
 		
@@ -66,6 +69,35 @@
 		
 	}
 	
+	function onMarkerClick(e,navaid){ //show range circle from navaid where it is detectable
+		//window.alert(e.latlng);
+		//this.getLatLng();
+		//window.alert(range);
+		//window.alert(navaid.paramRange);
+		
+		if (navaid.identifier == IDENTIFIER_lastNavaidClick){ //if current click is in the same last marker remove the range circle
+		   if(circleRange!=null) circleRange.remove(mymap);
+		   IDENTIFIER_lastNavaidClick=null;
+		}else{ // if current click is different than the last marker, show range circle
+		
+			let lat = navaid.geolocationLat;
+			let lng = navaid.geolocationLon;
+			let range = navaid.paramRange * 1852; //range in meters
+			
+			if(circleRange!=null) circleRange.remove(mymap);
+			
+			circleRange = L.circle([lat,lng], {
+				color: 'green',
+				fillColor: 'green',
+				fillOpacity: 0.5,
+				radius: range
+			}).addTo(mymap);	
+			
+			IDENTIFIER_lastNavaidClick = navaid.identifier;
+		}
+	}
+	
+	// function for testing purposes
 	function testNavaidsRoute(navaid1, navaid10, navaid20){
 				
 		var lat1 = navaid1.geolocationLat;
@@ -167,6 +199,10 @@
 
 	}
 	
+	// ********************************************
+	// ***    ROUTE FLIGHT PLAN IMPLENTATION 	***
+	// ********************************************
+	
 	function calculateFlightPlan(){
 		
 		var lat1 = document.getElementById("lat1").value; 
@@ -182,7 +218,6 @@
 		//window.alert("Missing implementation");
 		
 	}
-	
 	
 	function sendSimpleRouteRequest(p_lat1,p_lng1,p_lat2,p_lng2){
 				
