@@ -91,6 +91,19 @@
 				
 	}
 	
+	function drawNavaidsRoute(polylinePoints){
+
+		var polyline = L.polyline(polylinePoints,{ pane: "polylines" }).addTo(mymap);   
+		
+		polyline.setStyle({
+			color: 'red',
+			weight: 10
+		});
+		
+		routePolyline = polyline;
+				
+	}
+	
 	function createCircle(lat,lng,message){
 		
 		var circle = L.circle([lat,lng], {
@@ -185,7 +198,7 @@
 		    data: jsonObject,
 		    success: function (result) {
 		        //console.log(result);
-				//window.alert(JSON.stringify(result));
+				window.alert(JSON.stringify(result));
 				processRouteDataToMap(result);
 		    },
 		    
@@ -199,19 +212,33 @@
 	
 	
 	function processRouteDataToMap(jsonResponse){
+			
+		var routeList = [];
 				
 		var navaidList = jsonResponse.route;
 		var success = jsonResponse.success;
 		var message = jsonResponse.message;
+		var firstLeg = true;
+		var lastLeg = true;
 		
 		if (success==false){
 			if( navaidList.length==0 ){ //There is not any  VOR station with range enough to be detected at departure location
 				window.alert(message);
+				firstLeg=false;
+				firstLeg=false;
 			}else{ //There is not any  VOR station with range enough to be detected at some point in the middle of this route
 				window.alert(message);
+				firstLeg=true;
+				lastLeg=false;
 			}
 		}
 		
+		//window.alert("all working fine!");
+			
+		if(firstLeg){
+			routeList.push(getFirstLeg());
+		}
+			
 		for (var i = 0;i<navaidList.length;i++){
 			
 			var navaid = navaidList[i];
@@ -222,10 +249,28 @@
 			var idName = navaid.idName;
 			var type = navaid.type;
 			
-			var navaidInfo = "[idName="+idName+" , name="+name+" , type="+type+"]";
-			
+			//var navaidInfo = "[idName="+idName+" , name="+name+" , type="+type+"]";
+			routeList.push([lat,lon]);
 		}
-				
+		
+		//window.alert("FIRST LEG"+firstLeg);
+
+		if(lastLeg){
+			routeList.push(getLastLeg());
+		}
+		
+		
+		drawNavaidsRoute(routeList);
+	}
+	
+	function getFirstLeg(){
+		var latlng = departureMark.getLatLng();
+		return [latlng.lat,latlng.lng];
 	}
 	
 	
+	function getLastLeg(){
+		var latlng = arrivalMark.getLatLng();
+		return [latlng.lat,latlng.lng];
+	
+	}

@@ -54,7 +54,8 @@ public class RouteServiceImpl implements IRouteService{
 									" at some point in the middle of this route");
 			}
 			route.add(nextNavaid);
-			
+			currentNavaid = nextNavaid;
+
 			remainingDistance = newDistance;
 			lastNavaid = isLocationDetectableFromNavaid(fromTo.getArrivalLocation(), nextNavaid);
 		}
