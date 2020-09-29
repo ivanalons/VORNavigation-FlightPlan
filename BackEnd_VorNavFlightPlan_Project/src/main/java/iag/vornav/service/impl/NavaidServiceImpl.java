@@ -71,8 +71,8 @@ public class NavaidServiceImpl implements INavaidService{
 				navaidDTO.setParamRange(xmlRange.getValue());
 				navaidDTO.setParamRangeUnit(xmlRange.getUNIT());
 			}else {
-				navaidDTO.setParamRange(43); // DEFAULT RANGE - TODO THINK ABOUT IT!
-											 // AVG FROM ALL NOT NULL RANGES 
+				navaidDTO.setParamRange(100); // DEFAULT RANGE - TODO THINK ABOUT IT!
+											 // NOT AVG FROM ALL NOT NULL RANGES 
 			}
 			
 			navaidDTOList.add(navaidDTO);
@@ -112,7 +112,9 @@ public class NavaidServiceImpl implements INavaidService{
 				
 				if(sameNavaid==false) {
 					
-					double kmRange_sourceNavaid = MathTools.convertNMToKm(sourceNavaid.getParamRange());
+					// to find target detectable from sourceNavaid
+					// the targetNavaid range must be considered!!! (not the sourceNavaid range)
+					double kmRange_targetNavaid = MathTools.convertNMToKm(targetNavaid.getParamRange());
 					
 					Coordinate c1 = new Coordinate(sourceNavaid.getGeolocationLat(),
 												   sourceNavaid.getGeolocationLon());
@@ -121,7 +123,7 @@ public class NavaidServiceImpl implements INavaidService{
 					
 					double distance = HaversineDistance.calculateDistance(c1, c2);
 					
-					if(distance < kmRange_sourceNavaid) {
+					if(distance < kmRange_targetNavaid) {
 						saveNavaidRange(sourceNavaid,targetNavaid);
 					}
 					

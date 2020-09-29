@@ -52,8 +52,9 @@
 			var name = navaid.name;
 			var idName = navaid.idName;
 			var type = navaid.type;
+			var range = navaid.paramRange;
 			
-			var navaidInfo = "[idName="+idName+" , name="+name+" , type="+type+"]";
+			var navaidInfo = "[idName="+idName+" , name="+name+" , type="+type+", paramRange="+range+"]";
 			
 			var marker = L.marker([lat, lon]);
 			//marker.setOpacity(0.5);
