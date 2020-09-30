@@ -49,3 +49,11 @@ HOW TO INSTALL (DEVELOPMENT VERSION)
 	(Be careful IF backend is running, if not a query navaids error will be thrown instead of 
 	 showing the leaflet map)
 
+10) The markers shown on the map represent the navaids.
+	Click on any marker to view navaid details and to check navaid range (shown in a green circle)
+	First click on the map: to choose departure location
+	Second click on the map: to choose arrival location
+	If you choose wrong, click on button "Reset Departure and Arrival" to clear departure and 
+	arrival selections.
+	
+11) Click on button "CALCULATE FLIGHT PLAN" to show the route calculated with a simple algorithm.
