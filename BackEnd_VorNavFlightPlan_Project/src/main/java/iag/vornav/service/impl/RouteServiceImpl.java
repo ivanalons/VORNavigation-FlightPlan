@@ -28,6 +28,29 @@ public class RouteServiceImpl implements IRouteService{
 	@Autowired
 	INavaidDAO iNavaidDAO;
 	
+	/**
+	 * 
+	 * Algorithm that calculates an ordered list of navaids(coordinates) [parameter route] that 
+	 * represents the route path of the flight plan. The route is updated while it is being calculated.
+	 * 
+	 * The route is calculated from departure location to arrival location. [parameter fromTo]
+	 * 
+	 * How it works: 
+	 * 		1) It is selected the first navaid found in database which range is detectable from
+	 * 		   departure location. It is added to the route. (First Navaid Strategy)
+	 * 		   If there is not any navaid close to departure location an exception is thrown,
+	 * 		   and the algorithm is interrupted.
+	 * 		2) The variable remainingDistance is the lineal distance from the current navaid to the
+	 * 		   departure location. It is used as interrupting strategy so if the next navaid chosen
+	 * 		   has a remainingDistance longer than the previous navaid, the algorithm is interrupted.
+	 * 		   (Stop Strategy)
+	 * 		3) From current navaid, from database table "range" we can get all its detectable
+	 * 		   navaids.
+	 * 		4) The detectable navaid with the least distance to the arrival location will be selected
+	 * 		   as nextNavaid (Next Navaid Strategy). Next navaid is added to the route.
+	 * 		5) Go to step (2) until the arrival location is detected by the current navaid.
+	 * 
+	 */
 	@Override
 	public void calculateSimpleRoute(FlightFromTo fromTo, List<NavaidDTO> route) throws Exception{
 
@@ -66,6 +89,13 @@ public class RouteServiceImpl implements IRouteService{
 		
 	}
 
+	/**
+	 * 
+	 * Returns the first navaid found in database which range is detectable from departure location.
+	 * (First Navaid Strategy)
+	 * If there is not any navaid close to departure location a null value is returned.
+	 * 
+	 */
 	@Override
 	public NavaidDTO detectSimpleFirstNavaid(Coordinate departureLocation) {
 		
@@ -92,6 +122,7 @@ public class RouteServiceImpl implements IRouteService{
 
 	/**
 	 * Returns the target navaid, from detectableNavaids list, nearest to the arrivalLocation
+	 * (Next Navaid Strategy)
 	 * 
 	 * @param detectableNavaids
 	 * @param arrivalLocation
@@ -132,9 +163,6 @@ public class RouteServiceImpl implements IRouteService{
 		
 		if(distance<=navaidRange) {
 			locationInRange = true;
-//			System.out.println("DEPARTURE NAVAID = " + navaid.getIdName());
-//			System.out.println("Distance = " + distance);
-//			System.out.println("navaidRange = " + navaidRange);
 		}
 		
 		return locationInRange;

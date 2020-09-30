@@ -7,6 +7,11 @@ package iag.vornav.tools;
  * @author Ivan Alonso
  *
  */
+/**
+ * 
+ * This class defines a geolocation
+ *
+ */
 public class Coordinate {
 
 	private double latitude;

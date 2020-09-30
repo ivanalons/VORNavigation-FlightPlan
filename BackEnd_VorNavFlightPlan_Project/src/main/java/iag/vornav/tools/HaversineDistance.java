@@ -9,8 +9,23 @@ import iag.vornav.dto.NavaidDTO;
  * @author Ivan Alonso
  *
  */
+
+/**
+ * 
+ * The haversine formula determines the great-circle distance between two points on a sphere given 
+ * their longitudes and latitudes. 
+ * 
+ */
 public class HaversineDistance {
 
+	/**
+	 * 
+	 * Return the distance between two points on Earth (coordinates with latitude and longitude)
+	 * 
+	 * @param c1 - coordinate 1
+	 * @param c2 - coordinate 2
+	 * @return - spherical distance between coordinate1 and coordinate 2
+	 */
 	public static double calculateDistance(Coordinate c1, Coordinate c2) {
 
 		final double R = 6371.0088; // Radious of the earth
