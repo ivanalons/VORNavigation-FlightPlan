@@ -237,7 +237,7 @@
 		    data: jsonObject,
 		    success: function (result) {
 		        //console.log(result);
-				window.alert(JSON.stringify(result));
+				//window.alert(JSON.stringify(result));
 				processRouteDataToMap(result);
 		    },
 		    

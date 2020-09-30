@@ -32,10 +32,12 @@ public class RouteServiceImpl implements IRouteService{
 	public void calculateSimpleRoute(FlightFromTo fromTo, List<NavaidDTO> route) throws Exception{
 
 		NavaidDTO firstNavaid = detectSimpleFirstNavaid(fromTo.getDepartureLocation());
-		
+				
 		if (firstNavaid==null) throw new Exception("There is not any navaid station with range enough"
 												  +"to be detected at departure location");
 		// CALCULATE FLIGHT PLAN
+		route.add(firstNavaid);
+
 		
 		boolean lastNavaid = false;
 		double remainingDistance = HaversineDistance.calculateDistance(firstNavaid, 
@@ -49,10 +51,12 @@ public class RouteServiceImpl implements IRouteService{
 			NavaidDTO nextNavaid = routeSimpleNextNavaid(detectableNavaids, fromTo.getArrivalLocation());
 			
 			double newDistance = HaversineDistance.calculateDistance(nextNavaid,fromTo.getArrivalLocation() );
+			
 			if ( newDistance > remainingDistance ) {
 				throw new Exception(" There is not any  VOR station with range enough to be detected"+
 									" at some point in the middle of this route");
 			}
+			
 			route.add(nextNavaid);
 			currentNavaid = nextNavaid;
 
@@ -121,12 +125,19 @@ public class RouteServiceImpl implements IRouteService{
 	 */
 	private boolean isLocationDetectableFromNavaid(Coordinate location, NavaidDTO navaid) {
 				
+		boolean locationInRange = false;
+		
 		double distance = HaversineDistance.calculateDistance(location, navaid);
 		double navaidRange = MathTools.convertNMToKm(navaid.getParamRange());
-	
-		if(distance<=navaidRange) return true;
 		
-		return false;
+		if(distance<=navaidRange) {
+			locationInRange = true;
+//			System.out.println("DEPARTURE NAVAID = " + navaid.getIdName());
+//			System.out.println("Distance = " + distance);
+//			System.out.println("navaidRange = " + navaidRange);
+		}
+		
+		return locationInRange;
 	}
 	
 }
