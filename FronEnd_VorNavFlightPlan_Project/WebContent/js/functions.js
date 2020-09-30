@@ -1,15 +1,31 @@
+	
+	//*****************************
+	//*     GLOBAL VARIABLES      *
+	//*****************************
+	
 	var mymap = null; //global variable to operate with javaScript with Leaflet map
-	var routePolyline = null; //global variable to remove polylines for route drawings
-	var departureMark = null;
-	var arrivalMark = null;
+	var routePolyline = null; //polyline object stored to remove polylines from previous route (clearing the map for a new route)
+	var departureMark = null; //departure location marker
+	var arrivalMark = null; //arrival location marker
 	var circleRange = null; //last navaid range circle object shown in last marker click
 	var IDENTIFIER_lastNavaidClick = null; //last navaid marker click
 	
-	function setUpLeafletMap(){
+	
+	//*****************************
+	//*        FUNCTIONS          *
+	//*****************************
+	
+	// Function to set up the leaflet map
+	//
+	// How to show objects in front over the map: (working with panes)
+	//    Indicate attribute pane with value "polylines" when creating objects to show and bring the object to the front.
+	//    Example:  var polyline = L.polyline(polylinePoints,{ pane: "polylines" }).addTo(mymap);   
+
+	function setUpLeafletMap(){ 
 		mymap = L.map('mapid').setView([40.2085, -3.713], 6);
 		
 		mymap.createPane('polylines');
-		mymap.getPane('polylines').style.zIndex = 650;
+		mymap.getPane('polylines').style.zIndex = 650; // PANE "polylines" CREATED!
 		
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -18,6 +34,7 @@
 		mymap.on('click', onMapClick);
 	}
 	
+	// AJAX HTTP Request to get a list with all navaids from backend REST service
 	function sendGetNavaidsRequest(){
 				
 		$.ajax({
@@ -41,6 +58,8 @@
 			
 	}
 	
+	// Draw with markers on the leaflet map all the navaids locations 
+	// PARAM jsonResponse : response from REST service : list of all navaids from database
 	function processNavaidsDataToMap(jsonResponse){
 				
 		var navaidList = jsonResponse.navaids;
@@ -69,6 +88,12 @@
 		
 	}
 	
+	// Function executed when a navaid marker is clicked
+	// Draws a circle in navaid location (the same than the marker) with the real range. Useful to understand route algorithm.
+	// If it is the second time that the marker is clicked, the range circle is removed.
+	//
+	// PARAM navaid : contains all the info about the navaid that represents this marker
+	
 	function onMarkerClick(e,navaid){ //show range circle from navaid where it is detectable
 		//window.alert(e.latlng);
 		//this.getLatLng();
@@ -78,7 +103,7 @@
 		if (navaid.identifier == IDENTIFIER_lastNavaidClick){ //if current click is in the same last marker remove the range circle
 		   if(circleRange!=null) circleRange.remove(mymap);
 		   IDENTIFIER_lastNavaidClick=null;
-		}else{ // if current click is different than the last marker, show range circle
+		}else{ // if current click is different than the last marker, draw and show new range circle
 		
 			let lat = navaid.geolocationLat;
 			let lng = navaid.geolocationLon;
@@ -97,7 +122,7 @@
 		}
 	}
 	
-	// function for testing purposes
+	// function for testing purposes. It draws a polyline on the map.
 	function testNavaidsRoute(navaid1, navaid10, navaid20){
 				
 		var lat1 = navaid1.geolocationLat;
@@ -124,6 +149,7 @@
 				
 	}
 	
+	// Draw the polyline route on the map with the points passed by parameter
 	function drawNavaidsRoute(polylinePoints){
 
 		var polyline = L.polyline(polylinePoints,{ pane: "polylines" }).addTo(mymap);   
@@ -137,6 +163,8 @@
 				
 	}
 	
+	// Draw a circle in coordinate with latitude "lat" and longitude "lng" and show popUp with message "message"
+	// Used to draw departure and arrival location points
 	function createCircle(lat,lng,message){
 		
 		var circle = L.circle([lat,lng], {
@@ -150,6 +178,11 @@
 		return circle;
 	}
 	
+	//
+	// When the leaflet map is clicked: (the parameter contains the map coordinates where is clicked)
+	//	  if departure location is empty, get map coordinates for departure and draw departure location on the map
+	//	  if arrival location is empty, get map coordinates for arrival and draw arrival location on the map
+	//
 	function onMapClick(e) {
 		//alert("You clicked the map at " + e.latlng);
 		var lat = e.latlng.lat;
@@ -182,6 +215,8 @@
 		}
 	}
 
+	// Clear departure location and arrival location from text fields and remove circle points from the map.
+	// Remove also the route polylines (if there are) from the map.
 	function resetLocations(){
 				
 		document.getElementById("lat1").value = ""; 
@@ -202,7 +237,10 @@
 	// ********************************************
 	// ***    ROUTE FLIGHT PLAN IMPLENTATION 	***
 	// ********************************************
+	// except function drawNavaidsRoute that is long before this line of code...
 	
+	// Prepare coordinates and call the REST service to get the simple route calculation
+	// This function encapsulate all the route process until it is drawn on the map 
 	function calculateFlightPlan(){
 		
 		var lat1 = document.getElementById("lat1").value; 
@@ -218,6 +256,8 @@
 		//window.alert("Missing implementation");
 		
 	}
+	
+	// Prepare JSON call at HTTP body request and call the REST service to get the simple route calculation
 	
 	function sendSimpleRouteRequest(p_lat1,p_lng1,p_lat2,p_lng2){
 				
@@ -238,7 +278,7 @@
 		    success: function (result) {
 		        //console.log(result);
 				//window.alert(JSON.stringify(result));
-				processRouteDataToMap(result);
+				processRouteDataToMap(result); //draw route on the map from REST service response with navaids list
 		    },
 		    
 		    error: function (error) {
@@ -249,6 +289,7 @@
 			
 	}
 	
+	// It draws the route on the map using the navaids list from the REST service response
 	
 	function processRouteDataToMap(jsonResponse){
 			
@@ -274,7 +315,7 @@
 		
 		//window.alert("all working fine!");
 			
-		if(firstLeg){
+		if(firstLeg){ // add departure location to the route polyline
 			routeList.push(getFirstLeg());
 		}
 			
@@ -289,12 +330,12 @@
 			var type = navaid.type;
 			
 			//var navaidInfo = "[idName="+idName+" , name="+name+" , type="+type+"]";
-			routeList.push([lat,lon]);
+			routeList.push([lat,lon]); // add navaid location to the route polyline
 		}
 		
 		//window.alert("FIRST LEG"+firstLeg);
 
-		if(lastLeg){
+		if(lastLeg){ // add arrival location to the route polyline
 			routeList.push(getLastLeg());
 		}
 		
@@ -302,12 +343,13 @@
 		drawNavaidsRoute(routeList);
 	}
 	
+	// return an array with the departure location (departure marker location)
 	function getFirstLeg(){
 		var latlng = departureMark.getLatLng();
 		return [latlng.lat,latlng.lng];
 	}
 	
-	
+	// return an array with the arrival location (arrival marker location)
 	function getLastLeg(){
 		var latlng = arrivalMark.getLatLng();
 		return [latlng.lat,latlng.lng];
