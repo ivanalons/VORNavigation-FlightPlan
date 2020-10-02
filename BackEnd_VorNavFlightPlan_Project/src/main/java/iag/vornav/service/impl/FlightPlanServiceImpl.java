@@ -85,7 +85,7 @@ public class FlightPlanServiceImpl implements IFlightPlanService{
 	}
 
 	@Override
-	public FlightPlanJson getFlightPlanById(Long flightId) {
+	public FlightPlanJson getFlightPlanByFlightId(Long flightId) {
 		
 		FlightPlanJson json = new FlightPlanJson();
 		

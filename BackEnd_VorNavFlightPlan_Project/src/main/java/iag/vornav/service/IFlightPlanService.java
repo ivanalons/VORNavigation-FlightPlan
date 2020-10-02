@@ -16,7 +16,7 @@ public interface IFlightPlanService {
 	
 	public void saveFlightPlan(FlightPlanJson flightPlan) throws Exception;
 	
-	public FlightPlanJson getFlightPlanById(Long flightId);
+	public FlightPlanJson getFlightPlanByFlightId(Long flightId);
 	
 	public List<FlightDTO> getAllFlights();
 

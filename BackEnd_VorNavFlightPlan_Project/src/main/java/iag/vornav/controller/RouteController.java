@@ -115,7 +115,7 @@ public class RouteController {
 
 		Map<String,Object> map = new HashMap<>();
 
-		FlightPlanJson json = flightPlanServiceImpl.getFlightPlanById(flightId);
+		FlightPlanJson json = flightPlanServiceImpl.getFlightPlanByFlightId(flightId);
 		
 		map.put("flightPlan",json);
 		map.put("success", true);
