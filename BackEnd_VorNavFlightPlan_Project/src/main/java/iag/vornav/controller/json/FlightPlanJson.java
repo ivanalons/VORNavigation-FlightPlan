@@ -11,13 +11,15 @@ import iag.vornav.dto.NavaidDTO;
  * @author Ivan Alonso
  *
  */
-public class RouteJson {
+public class FlightPlanJson {
 
 	private FlightFromTo flightFromTo;
 	
 	private List<NavaidDTO> route;
+	
+	private String name;
 
-	public RouteJson() {
+	public FlightPlanJson() {
 		
 	}
 	
@@ -25,7 +27,7 @@ public class RouteJson {
 	 * @param flightFromto
 	 * @param route
 	 */
-	public RouteJson(FlightFromTo flightFromTo, List<NavaidDTO> route) {
+	public FlightPlanJson(FlightFromTo flightFromTo, List<NavaidDTO> route) {
 		this.flightFromTo = flightFromTo;
 		this.route = route;
 	}
@@ -34,7 +36,7 @@ public class RouteJson {
 		return flightFromTo;
 	}
 
-	public void setFlightFromto(FlightFromTo flightFromTo) {
+	public void setFlightFromTo(FlightFromTo flightFromTo) {
 		this.flightFromTo = flightFromTo;
 	}
 
@@ -45,5 +47,15 @@ public class RouteJson {
 	public void setRoute(List<NavaidDTO> route) {
 		this.route = route;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 	
 }

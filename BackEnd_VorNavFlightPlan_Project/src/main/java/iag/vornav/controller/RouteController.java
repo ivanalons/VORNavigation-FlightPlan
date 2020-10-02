@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import iag.vornav.controller.json.FlightFromTo;
-import iag.vornav.controller.json.RouteJson;
+import iag.vornav.controller.json.FlightPlanJson;
+import iag.vornav.dto.FlightPlanDTO;
 import iag.vornav.dto.NavaidDTO;
+import iag.vornav.service.impl.FlightPlanServiceImpl;
 import iag.vornav.service.impl.RouteServiceImpl;
 
 /**
@@ -27,6 +29,9 @@ import iag.vornav.service.impl.RouteServiceImpl;
 @RestController
 @RequestMapping("/api/routes")
 public class RouteController {
+	
+	@Autowired
+	FlightPlanServiceImpl flightPlanServiceImpl;
 	
 	@Autowired
 	RouteServiceImpl routeServiceImpl;
@@ -85,14 +90,16 @@ public class RouteController {
 		
 	}
 	
+	//TODO move this method to FlightPlan Controller ???
 	@PostMapping
-	public Map<String,Object> saveFlightPlan(@RequestBody RouteJson routeJson){
+	public Map<String,Object> saveFlightPlan(@RequestBody FlightPlanJson flightPlanJson){
 		
-		System.out.println("Hoola");
+		FlightPlanDTO flightPlan = flightPlanServiceImpl.saveFlightPlan(flightPlanJson);
 		
 		Map<String,Object> map = new HashMap<>();
-		map.put("success", false);
-		map.put("message", "saveFlightPlan Not implemented yet.");
+		map.put("flightPlan", flightPlan);
+		map.put("success", true);
+		map.put("message", "Flight Plan saved.");
 		
 		return map;
 		
