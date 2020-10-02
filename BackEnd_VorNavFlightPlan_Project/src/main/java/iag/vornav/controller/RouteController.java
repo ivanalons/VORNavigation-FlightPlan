@@ -94,11 +94,18 @@ public class RouteController {
 	@PostMapping
 	public Map<String,Object> saveFlightPlan(@RequestBody FlightPlanJson flightPlanJson){
 		
-		flightPlanServiceImpl.saveFlightPlan(flightPlanJson);
-		
 		Map<String,Object> map = new HashMap<>();
-		map.put("success", true);
-		map.put("message", "Flight Plan saved.");
+
+		try {
+			flightPlanServiceImpl.saveFlightPlan(flightPlanJson);
+			map.put("success", true);
+			map.put("message", "Flight Plan saved.");
+		}catch(Exception e) {
+			map.put("false", true);
+			map.put("message", e.getMessage());
+		}
+		
+	
 		
 		return map;
 		

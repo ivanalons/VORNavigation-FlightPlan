@@ -14,6 +14,6 @@ import iag.vornav.dto.FlightPlanDTO;
  */
 public interface IFlightPlanService {
 	
-	public void saveFlightPlan(FlightPlanJson flightPlan);
+	public void saveFlightPlan(FlightPlanJson flightPlan) throws Exception;
 	
 }
