@@ -9,7 +9,7 @@
 	var arrivalMark = null; //arrival location marker
 	var circleRange = null; //last navaid range circle object shown in last marker click
 	var IDENTIFIER_lastNavaidClick = null; //last navaid marker click
-	
+	var currentNavaidList = null; //list of navaids from the current flight plan
 	
 	//*****************************
 	//*        FUNCTIONS          *
@@ -298,6 +298,9 @@
 		var navaidList = jsonResponse.route;
 		var success = jsonResponse.success;
 		var message = jsonResponse.message;
+		
+		currentNavaidList = navaidList; // save navaids list in global variable
+		
 		var firstLeg = true;
 		var lastLeg = true;
 		
@@ -355,3 +358,70 @@
 		return [latlng.lat,latlng.lng];
 	
 	}
+	
+// ********************************************
+// ***    SAVE FLIGHT PLAN IMPLENTATION 	***
+// ********************************************	
+	
+	function saveFlightPlan(){
+		var json = prepareJSONBodyRequest();
+		sendSaveFlightPlanRequest(json);
+	}
+	
+	function prepareJSONBodyRequest(){
+		
+		var flightFromTo = null;
+		var route = [];
+				
+		for(let i=0; i<currentNavaidList.length; i++){
+			route.push({ "identifier" : currentNavaidList[i].identifier });
+		}
+		
+		var departureArray = getFirstLeg();
+		var arrivalArray = getLastLeg();
+		
+		flightFromTo = { "departureLocation" : 
+						        {
+						            "latitude" : departureArray[0],
+						            "longitude" : departureArray[1]
+						        },
+					        "arrivalLocation" : 
+						        {
+						            "latitude" : arrivalArray[0],
+						            "longitude" : arrivalArray[1]
+						        }
+		   				}; //end flightFromTo
+		
+		var json = { "flightFromTo" : flightFromTo,
+					 "route" : route };
+		
+		json = JSON.stringify(json);
+		//window.alert(json);
+
+		return json;
+    }
+		
+	function sendSaveFlightPlanRequest(jsonRequest){
+		
+		$.ajax({
+		    url: 'http://localhost:8181/api/routes',
+			type: "POST",
+		    method: "POST", 
+		    dataType: "json",
+		    contentType: "application/json",
+		    data: jsonRequest,
+		    success: function (result) {
+		        //console.log(result);
+				window.alert(JSON.stringify(result));
+		    },
+		    
+		    error: function (error) {
+		        console.log(error);
+				window.alert("Error connecting or retrieving data with REST service.");
+		    }
+		});
+			
+	}
+		
+	
+	
