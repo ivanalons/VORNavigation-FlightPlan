@@ -4,6 +4,7 @@
 package iag.vornav.service.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,64 @@ public class FlightPlanServiceImpl implements IFlightPlanService{
 		}
 		
 		iFlightPlanDAO.saveAll(listFlightPlan);
+	}
+
+	@Override
+	public FlightPlanJson getFlightPlanById(Long flightId) {
+		
+		FlightPlanJson json = new FlightPlanJson();
+		
+		FlightDTO flight = iFlightDAO.findById(flightId).get();
+		
+		FlightFromTo fromTo = getFromToLocations(flight);
+		json.setFlightFromTo(fromTo);
+		
+		List<FlightPlanDTO> listFlightPlan = flight.getFlightPlanList();
+
+		List<NavaidDTO> route = getNavaidsListFromFlightPlan(listFlightPlan);
+		json.setRoute(route);
+		
+		return json;
+	}
+	
+	private FlightFromTo getFromToLocations(FlightDTO flight) {
+		FlightFromTo fromTo =  new FlightFromTo();
+		
+		double lat1 = flight.getDeparture_lat();
+		double lng1 = flight.getDeparture_lng();
+		Coordinate c1 = new Coordinate(lat1,lng1);
+		
+		double lat2 = flight.getArrival_lat();
+		double lng2 = flight.getArrival_lng();
+		Coordinate c2 = new Coordinate(lat2,lng2);
+		
+		fromTo.setDepartureLocation(c1);
+		fromTo.setArrivalLocation(c2);
+
+		return fromTo;
+	}
+
+	private List<NavaidDTO> getNavaidsListFromFlightPlan(List<FlightPlanDTO> listFlightPlan){
+		
+		List<NavaidDTO> listNavaidDTO = new ArrayList<>();
+		
+		//TO CHECK is sorting needed???
+		listFlightPlan.sort( Comparator.comparingInt(p -> p.getStep()) );  
+		//(FlightPlanDTO f1, FlightPlanDTO f2) -> (f1.getStep() - f2.getStep());
+		
+		for(FlightPlanDTO fp : listFlightPlan) {
+			NavaidDTO navaid = fp.getNavaid();
+			listNavaidDTO.add(navaid);
+		}
+		
+		return listNavaidDTO;
+		
+	}
+
+	
+	@Override
+	public List<FlightDTO> getAllFlights() {
+		return iFlightDAO.findAll();
 	}
 
 }
