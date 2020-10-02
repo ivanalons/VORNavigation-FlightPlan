@@ -31,9 +31,9 @@ public class FlightPlanDTO {
 	@ManyToOne
 	private FlightDTO flight;
 	
-//	@MapsId("stepId")
-//	@ManyToOne
-//	private Integer step;
+//	@MapsId("stepId") // it has no sense because "step" field is not a DTO
+//	@ManyToOne        // it has no sense because "step" field is not a DTO
+//	private Integer step; // value stored and accessible from flightPlanId.stepId
 	
 	@JsonIgnore
 	@JoinColumn(name="navaid_id")
@@ -75,13 +75,13 @@ public class FlightPlanDTO {
 		this.flight = flight;
 	}
 
-//	public Integer getStep() {
-//		return step;
-//	}
-//
-//	public void setStep(Integer step) {
-//		this.step = step;
-//	}
+	public Integer getStep() { // be careful! step value is an embeddedId
+		return flightPlanId.getStepId();
+	}
+
+	public void setStep(Integer step) { // be careful! step value is an embeddedId
+		this.flightPlanId.setStepId(step);
+	}
 
 	public NavaidDTO getNavaid() {
 		return navaid;
