@@ -3,7 +3,7 @@
  */
 package iag.vornav.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import iag.vornav.controller.json.FlightPlanJson;
 import iag.vornav.dto.FlightPlanDTO;
@@ -14,6 +14,6 @@ import iag.vornav.dto.FlightPlanDTO;
  */
 public interface IFlightPlanService {
 	
-	public FlightPlanDTO saveFlightPlan(FlightPlanJson flightPlan);
+	public void saveFlightPlan(FlightPlanJson flightPlan);
 	
 }

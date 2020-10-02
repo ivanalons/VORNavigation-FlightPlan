@@ -3,14 +3,21 @@
  */
 package iag.vornav.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import iag.vornav.controller.json.FlightFromTo;
 import iag.vornav.controller.json.FlightPlanJson;
 import iag.vornav.dao.IFlightDAO;
+import iag.vornav.dao.IFlightPlanDAO;
+import iag.vornav.dao.INavaidDAO;
 import iag.vornav.dto.FlightDTO;
 import iag.vornav.dto.FlightPlanDTO;
+import iag.vornav.dto.NavaidDTO;
+import iag.vornav.dto.serializable.FlightPlanId;
 import iag.vornav.service.IFlightPlanService;
 import iag.vornav.tools.Coordinate;
 
@@ -24,8 +31,14 @@ public class FlightPlanServiceImpl implements IFlightPlanService{
 	@Autowired
 	IFlightDAO iFlightDAO;
 	
+	@Autowired
+	IFlightPlanDAO iFlightPlanDAO;
+	
+	@Autowired
+	INavaidDAO iNavaidDAO;
+	
 	@Override
-	public FlightPlanDTO saveFlightPlan(FlightPlanJson flightPlan) {
+	public void saveFlightPlan(FlightPlanJson flightPlan) {
 
 		FlightFromTo fromTo = flightPlan.getFlightFromTo();
 		
@@ -40,10 +53,30 @@ public class FlightPlanServiceImpl implements IFlightPlanService{
 		String flightName = flightPlan.getName();
 		
 		FlightDTO flightDTO = new FlightDTO(flightName,lat1,lng1,lat2,lng2);
-		FlightDTO createdFlight = iFlightDAO.save(flightDTO);
+		FlightDTO createdFlightDTO = iFlightDAO.save(flightDTO);
 		
-		return null;
+		saveRouteInFlightPlan(createdFlightDTO, flightPlan.getRoute() );
 		
+	}
+	
+	// The only field not null in list NavaidDTO is "identifier" list
+	// TODO save flightPlan by identifier without querying for each navaid in route 
+	private void saveRouteInFlightPlan(FlightDTO flight, List<NavaidDTO> navaidsRoute) {
+
+		List<FlightPlanDTO> listFlightPlan = new ArrayList<>();
+		
+		int step = 1;
+		
+		for (NavaidDTO navId : navaidsRoute ) {
+			
+			NavaidDTO navaid = iNavaidDAO.findById(navId.getIdentifier()).get();
+			FlightPlanDTO flightPlan = new FlightPlanDTO(flight,step,navaid);
+			listFlightPlan.add(flightPlan);
+			
+			step++;
+		}
+		
+		iFlightPlanDAO.saveAll(listFlightPlan);
 	}
 
 }
