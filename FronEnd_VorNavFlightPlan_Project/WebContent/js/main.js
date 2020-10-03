@@ -392,8 +392,12 @@
 						        }
 		   				}; //end flightFromTo
 		
+		var name = document.getElementById("flightPlanName").value;
+		//window.alert("name="+name);
+		
 		var json = { "flightFromTo" : flightFromTo,
-					 "route" : route };
+					 "route" : route ,
+					 "name" : name };
 		
 		json = JSON.stringify(json);
 		//window.alert(json);
@@ -404,7 +408,7 @@
 	function sendSaveFlightPlanRequest(jsonRequest){
 		
 		$.ajax({
-		    url: 'http://localhost:8181/api/routes',
+		    url: 'http://localhost:8181/api/flightplans',
 			type: "POST",
 		    method: "POST", 
 		    dataType: "json",

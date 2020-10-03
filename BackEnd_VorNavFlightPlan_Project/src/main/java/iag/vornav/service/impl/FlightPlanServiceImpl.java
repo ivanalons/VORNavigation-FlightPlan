@@ -142,4 +142,16 @@ public class FlightPlanServiceImpl implements IFlightPlanService{
 		return iFlightDAO.findAll();
 	}
 
+	@Override
+	public void removeFlightPlan(Long flightId) {
+
+		FlightDTO flight = iFlightDAO.findById(flightId).get();
+		
+		List<FlightPlanDTO> flightPlan = flight.getFlightPlanList();
+		
+		iFlightPlanDAO.deleteAll(flightPlan);
+		iFlightDAO.delete(flight);
+		
+	}
+
 }

@@ -10,15 +10,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import iag.vornav.controller.json.FlightFromTo;
-import iag.vornav.controller.json.FlightPlanJson;
-import iag.vornav.dto.FlightDTO;
 import iag.vornav.dto.NavaidDTO;
 import iag.vornav.service.impl.FlightPlanServiceImpl;
 import iag.vornav.service.impl.RouteServiceImpl;
@@ -30,9 +27,6 @@ import iag.vornav.service.impl.RouteServiceImpl;
 @RestController
 @RequestMapping("/api/routes")
 public class RouteController {
-	
-	@Autowired
-	FlightPlanServiceImpl flightPlanServiceImpl;
 	
 	@Autowired
 	RouteServiceImpl routeServiceImpl;
@@ -86,55 +80,6 @@ public class RouteController {
 		Map<String,Object> map = new HashMap<>();
 		map.put("success", false);
 		map.put("message", "Not implemented yet.");
-		
-		return map;
-		
-	}
-	
-	//TODO move this method to FlightPlan Controller ???
-	@PostMapping
-	public Map<String,Object> saveFlightPlan(@RequestBody FlightPlanJson flightPlanJson){
-		
-		Map<String,Object> map = new HashMap<>();
-
-		try {
-			flightPlanServiceImpl.saveFlightPlan(flightPlanJson);
-			map.put("success", true);
-			map.put("message", "Flight Plan saved.");
-		}catch(Exception e) {
-			map.put("success", false);
-			map.put("message", e.getMessage());
-		}
-		
-		return map;
-		
-	}
-	
-	@GetMapping("/{id}")
-	public Map<String,Object> getFlightPlanById(@PathVariable(name="id") Long flightId){
-
-		Map<String,Object> map = new HashMap<>();
-
-		FlightPlanJson json = flightPlanServiceImpl.getFlightPlanByFlightId(flightId);
-		
-		map.put("flightPlan",json);
-		map.put("success", true);
-		map.put("message", "Flight Plan saved.");
-		
-		return map;
-		
-	}
-	
-	@GetMapping("")
-	public Map<String,Object> getAllFlights(){
-
-		Map<String,Object> map = new HashMap<>();
-
-		List<FlightDTO> listFlights = flightPlanServiceImpl.getAllFlights();
-		
-		map.put("flights", listFlights);
-		map.put("success", true);
-		map.put("message", "Flight Plan saved.");
 		
 		return map;
 		

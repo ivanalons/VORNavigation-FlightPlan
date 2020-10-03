@@ -19,5 +19,7 @@ public interface IFlightPlanService {
 	public FlightPlanJson getFlightPlanByFlightId(Long flightId);
 	
 	public List<FlightDTO> getAllFlights();
+	
+	public void removeFlightPlan(Long flightId);
 
 }
