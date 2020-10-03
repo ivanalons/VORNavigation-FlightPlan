@@ -231,6 +231,8 @@
 		departureMark.remove(mymap);
 		
 		if(routePolyline!=null) routePolyline.remove(mymap);
+		
+		currentNavaidList = null;
 
 	}
 	
@@ -364,8 +366,12 @@
 // ********************************************	
 	
 	function saveFlightPlan(){
-		var json = prepareJSONBodyRequest();
-		sendSaveFlightPlanRequest(json);
+		if(currentNavaidList==null) {
+			window.alert("Calculate Flight Plan first.")
+		}else{			
+			var json = prepareJSONBodyRequest();
+			sendSaveFlightPlanRequest(json);
+		}
 	}
 	
 	function prepareJSONBodyRequest(){

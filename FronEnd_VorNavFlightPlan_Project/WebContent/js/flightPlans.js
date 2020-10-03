@@ -117,6 +117,7 @@
 		var flightId = select.value;
 		
 		removeFlightPlanRequest(flightId);
+		resetFlightPlanFromMap();
 	}
 	
 	function removeFlightPlanRequest(flightId){
