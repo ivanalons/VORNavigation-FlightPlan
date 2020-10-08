@@ -129,9 +129,16 @@ public class NavaidServiceImpl implements INavaidService{
 //		testcalculateNavaidsRange();
 		List<NavaidDTO> navaidList = iNavaidDAO.findAll();
 		
+		int listSize = navaidList.size();
+		int i = 0;
+		int j = 0;
+		
 		for( NavaidDTO sourceNavaid : navaidList ) {
+			
+			j=0;
+			
 			for( NavaidDTO targetNavaid : navaidList ) {
-				
+							
 				boolean sameNavaid = sourceNavaid.getIdentifier()==targetNavaid.getIdentifier();
 				
 				if(sameNavaid==false) {
@@ -147,10 +154,20 @@ public class NavaidServiceImpl implements INavaidService{
 					}
 					
 				}
-				
+				printPercentageNavaidsProcessed(listSize,i,j);
+				j++;
 			}
+			
+			i++;
 		}
 		
+	}
+	
+	private void printPercentageNavaidsProcessed(int listSize, int i, int j) {
+		
+		double processed = 100*((double) ( i*listSize + j )) / ((double)(listSize*listSize));
+		System.out.println("Range processed: [ Percentage=" + 
+							String.format("%.2f", processed) + " / 100 ] [ Navaid "+ i+1 + " of " + listSize+ " ]");
 	}
 	
 	/**
