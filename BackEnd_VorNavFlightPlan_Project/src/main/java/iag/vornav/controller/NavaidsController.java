@@ -96,4 +96,17 @@ public class NavaidsController {
 		return map;
 	}
 	
+	@GetMapping(value="/navaids/range/percentageProcessed")
+	public Map<String,Object> getNavaidsRangeProcessed(){
+		
+		double rangeProcessed = navaidServiceImpl.getNavaidsRangeProcessed();
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("success", true);
+		map.put("progress", String.format("%.5f", rangeProcessed));
+		map.put("message", "Percentage progress of navaids range calculated.");
+		return map;
+	}
+	
+	
 }

@@ -43,4 +43,7 @@ public interface INavaidService {
 	 * 
 	 */
 	public void calculateNavaidsRange();
+	
+	public double getNavaidsRangeProcessed(); //return the percentage of range navaids processed
+	
 }

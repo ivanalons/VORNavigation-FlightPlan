@@ -39,6 +39,8 @@ public class NavaidServiceImpl implements INavaidService{
 	
 	public final Integer defaultRange = 100; //DEFAULT RANGE FOR THOSE NAVAIDS WITH NULL RANGE
 	
+	private double rangeProcessed = 0; // Total percentage of navaids range processed
+	
 	/**
 	 * 
 	 * Store in database the Java object representation of a list of navaids in format openAIP for navaids.
@@ -154,20 +156,17 @@ public class NavaidServiceImpl implements INavaidService{
 					}
 					
 				}
-				printPercentageNavaidsProcessed(listSize,i,j);
+				updatePercentageNavaidsProcessed(listSize,i,j);
 				j++;
 			}
-			
+
+			printPercentageNavaidsProcessed(listSize,i); // print in console - TO COMMENT
 			i++;
 		}
 		
-	}
-	
-	private void printPercentageNavaidsProcessed(int listSize, int i, int j) {
-		
-		double processed = 100*((double) ( i*listSize + j )) / ((double)(listSize*listSize));
-		System.out.println("Range processed: [ Percentage=" + 
-							String.format("%.2f", processed) + " / 100 ] [ Navaid "+ i+1 + " of " + listSize+ " ]");
+		updatePercentageNavaidsProcessed(listSize,i,0);
+		printPercentageNavaidsProcessed(listSize,i); // print in console - TO COMMENT
+
 	}
 	
 	/**
@@ -195,6 +194,24 @@ public class NavaidServiceImpl implements INavaidService{
 		
 	}
 
+	private void updatePercentageNavaidsProcessed(int listSize, int i, int j) {
+		
+		this.rangeProcessed = 100*((double) ( i*listSize + j )) / ((double)(listSize*listSize));
+		
+	}
+	
+	private void printPercentageNavaidsProcessed(int listSize, int i) {
+		System.out.println("Range processed: [ Percentage=" + 
+		String.format("%.5f", this.rangeProcessed) + " / 100 ] [ Navaid "+
+						(i+1) + " of " + listSize+ " ]");
+	}
+	
+	@Override
+	public double getNavaidsRangeProcessed() {
+		
+		return this.rangeProcessed;
+	} 
+	
 	/**
 	 * 
 	 * Method prepared only for testing purposes
